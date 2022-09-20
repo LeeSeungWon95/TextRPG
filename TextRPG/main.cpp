@@ -16,15 +16,17 @@ enum MonsterType
 	MT_Skeleton
 };
 
-int PlayerType;
-int Hp;
-int Attack;
-int Defence;
+struct ObjectInfo
+{
+	int Type;
+	int Hp;
+	int Attack;
+	int Defence;
+};
 
-int MonsterType;
-int MonsterHp;
-int MonsterAttack;
-int MonsterDefence;
+ObjectInfo PlayerInfo;
+
+ObjectInfo MonsterInfo;
 
 void EnterLobby();
 void SelectPlayer();
@@ -79,30 +81,30 @@ void SelectPlayer()
 		cout << "(1) 기사 (2) 궁수 (3) 법사" << endl;
 		cout << "> ";
 
-		cin >> PlayerType;
+		cin >> PlayerInfo.Type;
 
-		if (PlayerType == PT_Knight)
+		if (PlayerInfo.Type == PT_Knight)
 		{
 			cout << "기사 생성중...!" << endl;
-			Hp = 150;
-			Attack = 10;
-			Defence = 5;
+			PlayerInfo.Hp = 150;
+			PlayerInfo.Attack = 10;
+			PlayerInfo.Defence = 5;
 			break;
 		}
-		else if (PlayerType == PT_Archer)
+		else if (PlayerInfo.Type == PT_Archer)
 		{
 			cout << "궁수 생성중...!" << endl;
-			Hp = 100;
-			Attack = 15;
-			Defence = 3;
+			PlayerInfo.Hp = 100;
+			PlayerInfo.Attack = 15;
+			PlayerInfo.Defence = 3;
 			break;
 		}
-		else if (PlayerType == PT_Mage)
+		else if (PlayerInfo.Type == PT_Mage)
 		{
 			cout << "법사 생성중...!" << endl;
-			Hp = 80;
-			Attack = 25;
-			Defence = 0;
+			PlayerInfo.Hp = 80;
+			PlayerInfo.Attack = 25;
+			PlayerInfo.Defence = 0;
 			break;
 		}
 	}
@@ -117,7 +119,7 @@ void EnterField()
 		cout << "필드에 입장했습니다!" << endl;
 		cout << "------------------" << endl;
 
-		cout << "[PLAYER] HP : " << Hp << " / ATT : " << Attack << " / DEF : " << Defence << endl;
+		cout << "[PLAYER] HP : " << PlayerInfo.Hp << " / ATT : " << PlayerInfo.Attack << " / DEF : " << PlayerInfo.Defence << endl;
 
 		CreateRandomMonster();
 
@@ -131,7 +133,7 @@ void EnterField()
 		if (Input == 1)
 		{
 			EnterBattle();
-			if (Hp == 0)
+			if (PlayerInfo.Hp == 0)
 			{
 				return;
 			}
@@ -146,27 +148,27 @@ void EnterField()
 void CreateRandomMonster()
 {
 	//1-3 으로 랜덤숫자를 뽑는다
-	MonsterType = 1 + (rand() % 3);
+	MonsterInfo.Type = 1 + (rand() % 3);
 
-	switch (MonsterType)
+	switch (MonsterInfo.Type)
 	{
 	case MT_Slime:
 		cout << "슬라임 생성중...! (Hp:15 / ATT:5 / DEF:0)" << endl;
-		MonsterHp = 15;
-		MonsterAttack = 5;
-		MonsterDefence = 0;
+		MonsterInfo.Hp = 15;
+		MonsterInfo.Attack = 5;
+		MonsterInfo.Defence = 0;
 		break;
 	case MT_Orc:
 		cout << "오크 생성중...! (Hp:40 / ATT:10 / DEF:3)" << endl;
-		MonsterHp = 40;
-		MonsterAttack = 10;
-		MonsterDefence = 3;
+		MonsterInfo.Hp = 40;
+		MonsterInfo.Attack = 10;
+		MonsterInfo.Defence = 3;
 		break;
 	case MT_Skeleton:
 		cout << "스켈레톤 생성중...! (Hp:80 / ATT:15 / DEF:5)" << endl;
-		MonsterHp = 80;
-		MonsterAttack = 15;
-		MonsterDefence = 5;
+		MonsterInfo.Hp = 80;
+		MonsterInfo.Attack = 15;
+		MonsterInfo.Defence = 5;
 		break;
 	}
 }
@@ -177,38 +179,38 @@ void EnterBattle()
 	while (true)
 	{
 		//먼저 플레이어가 때리기
-		int Damage = Attack - MonsterDefence;
+		int Damage = PlayerInfo.Attack - MonsterInfo.Defence;
 		if (Damage < 0)
 		{
 			Damage = 0;
 		}
-		MonsterHp -= Damage;
-		if (MonsterHp < 0)
+		MonsterInfo.Hp -= Damage;
+		if (MonsterInfo.Hp < 0)
 		{
-			MonsterHp = 0;
+			MonsterInfo.Hp = 0;
 		}
-		cout << "몬스터 남은 체력 : " << MonsterHp << endl;
+		cout << "몬스터 남은 체력 : " << MonsterInfo.Hp << endl;
 		
 		//몬스터가 죽었다면 반격의 기회 없이 바로 빠져나오면 된다
-		if (MonsterHp == 0)
+		if (MonsterInfo.Hp == 0)
 		{
 			cout << "몬스터를 처치했습니다!" << endl;
 			return;
 		}
 
 		//몬스터 반격
-		Damage = MonsterAttack - Defence;
+		Damage = MonsterInfo.Attack - PlayerInfo.Defence;
 		if (Damage < 0)
 		{
 			Damage = 0;
 		}
-		Hp -= Damage;
-		if (Hp < 0)
+		PlayerInfo.Hp -= Damage;
+		if (PlayerInfo.Hp < 0)
 		{
-			Hp = 0;
+			PlayerInfo.Hp = 0;
 		}
-		cout << "플레이어 남은 체력 : " << Hp << endl;
-		if (Hp == 0)
+		cout << "플레이어 남은 체력 : " << PlayerInfo.Hp << endl;
+		if (PlayerInfo.Hp == 0)
 		{
 			cout << "당신은 사망했습니다... GAME OVER" << endl;
 			return;
