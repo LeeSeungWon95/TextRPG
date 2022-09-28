@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\C++\MyC++Projects\x64\Debug\TextRPG.exe</FullPath>
+      <FullPath>C:\C++\MyC++Projects\TextRPG\x64\Debug\TextRPG.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />
